@@ -50,7 +50,7 @@ class _SignUpState extends State<SignUp> {
                       textField("User Name", Icons.person, false, _nameTE),
                       const SizedBox(height: 30.29),
                       textField("Email", Icons.alternate_email_outlined, false,
-                          _passwordTE),
+                          _emailTE),
                       const SizedBox(height: 30.29),
                       textField("Password", Icons.lock, true, _passwordTE),
                       const SizedBox(height: 35.29),

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "583555927034",
+    "project_id": "authmodule-161e3",
+    "storage_bucket": "authmodule-161e3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:583555927034:android:af3026a39fa103aa6cf243",
+        "android_client_info": {
+          "package_name": "com.example.auth_module"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDz3d1A8wdyXWWHQc2StTEt9Jo7MeMpyeQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

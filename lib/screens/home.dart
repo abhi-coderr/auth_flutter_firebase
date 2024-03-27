@@ -1,6 +1,5 @@
 import 'package:auth_module/screens/login.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -21,13 +20,9 @@ class _HomeState extends State<Home> {
         actions: [
           IconButton(
               onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const Login()));
-                if (Navigator.canPop(context)) {
-                  Navigator.pop(context);
-                } else {
-                  SystemNavigator.pop();
-                }
+                // Navigator.push(context,
+                //     MaterialPageRoute(builder: (context) => const Login()));
+                Navigator.popUntil(context, ModalRoute.withName("Login"));
               },
               icon: const Icon(Icons.logout))
         ],

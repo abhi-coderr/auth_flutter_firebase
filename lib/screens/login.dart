@@ -1,3 +1,4 @@
+import 'package:auth_module/screens/home.dart';
 import 'package:auth_module/screens/signup.dart';
 import 'package:flutter/material.dart';
 import '../utils/helper.dart';
@@ -34,11 +35,17 @@ class _LoginState extends State<Login> {
                     children: [
                       logoWidget("assets/images/user_firebase.png", 100, 100),
                       const SizedBox(height: 70.29),
-                      textField("Email", Icons.alternate_email_outlined, false, _emailTE),
+                      textField("Email", Icons.alternate_email_outlined, false,
+                          _emailTE),
                       const SizedBox(height: 30.29),
                       textField("Password", Icons.lock, true, _passwordTE),
                       const SizedBox(height: 35.29),
-                      button(context, true, () {}),
+                      button(context, true, () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const Home()));
+                      }),
                       const SizedBox(height: 35.29),
                       spannableOption(
                         context: context,
