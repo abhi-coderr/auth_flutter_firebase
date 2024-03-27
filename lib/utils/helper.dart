@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 Image logoWidget(String path, double width, double height) {
   return Image.asset(path, fit: BoxFit.fitWidth, width: width, height: height);
+}
+
+void showToast(String message) {
+  Fluttertoast.showToast(msg: message);
 }
 
 TextField textField(String title, IconData icon, bool isPassword,
@@ -19,7 +24,8 @@ TextField textField(String title, IconData icon, bool isPassword,
           color: Colors.white70,
         ),
         labelText: title,
-        labelStyle: TextStyle(color: Colors.white.withOpacity(0.9), fontSize: 12),
+        labelStyle:
+            TextStyle(color: Colors.white.withOpacity(0.9), fontSize: 12),
         filled: true,
         floatingLabelBehavior: FloatingLabelBehavior.never,
         fillColor: Colors.white.withOpacity(0.3),

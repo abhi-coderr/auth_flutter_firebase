@@ -1,7 +1,8 @@
 import 'package:auth_module/screens/home.dart';
+import 'package:auth_module/screens/login.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../utils/helper.dart';
-
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -56,17 +57,31 @@ class _SignUpState extends State<SignUp> {
                       textField("Password", Icons.lock, true, _passwordTE),
                       const SizedBox(height: 35.29),
                       button(context, false, () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const Home()));
+                        if (_nameTE.text.isNotEmpty &&
+                            _passwordTE.text.isNotEmpty &&
+                            _emailTE.text.isNotEmpty) {
+                          FirebaseAuth.instance
+                              .createUserWithEmailAndPassword(
+                                  email: _emailTE.text,
+                                  password: _passwordTE.text)
+                              .then((value) => {navigationToHome()})
+                              .onError((error, stackTrace) =>
+                                  {print("Error --> $error")});
+                        } else {
+                          showToast("Fill all field");
+                        }
                       }),
                       const SizedBox(height: 35.29),
                       spannableOption(
                         context: context,
                         isLogin: false,
                         onTap: () {
-                          Navigator.of(context).pop(true);
+                          FirebaseAuth.instance.signOut().then((value) => {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => Login()))
+                              });
                         },
                       )
                     ],
@@ -76,5 +91,10 @@ class _SignUpState extends State<SignUp> {
             ),
           )),
     );
+  }
+
+  void navigationToHome() {
+    // Navigator.push(
+    //     context, MaterialPageRoute(builder: (context) => const Home()));
   }
 }

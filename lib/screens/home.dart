@@ -1,14 +1,23 @@
+import 'package:auth_module/data/user_data.dart';
 import 'package:auth_module/screens/login.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class Home extends StatefulWidget {
-  const Home({super.key});
+  const Home({super.key, required this.data});
+
+  final UserData data;
 
   @override
-  State<Home> createState() => _HomeState();
+  State<Home> createState() => _HomeState(data: data);
 }
 
 class _HomeState extends State<Home> {
+  _HomeState({required this.data});
+
+  final UserData data;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,9 +29,9 @@ class _HomeState extends State<Home> {
         actions: [
           IconButton(
               onPressed: () {
-                // Navigator.push(context,
-                //     MaterialPageRoute(builder: (context) => const Login()));
-                Navigator.popUntil(context, ModalRoute.withName("Login"));
+                signOutFromGoogle();
+                Navigator.pushReplacement(
+                    context, MaterialPageRoute(builder: (context) => Login()));
               },
               icon: const Icon(Icons.logout))
         ],
@@ -41,19 +50,19 @@ class _HomeState extends State<Home> {
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: [Colors.purpleAccent, Colors.blueAccent])),
-        child: const Column(
+        child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  Text("User Name : ",
+                  Text("Email : ",
                       style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
                           fontSize: 15)),
-                  Text("Password : ",
+                  Text("Name : ",
                       style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
@@ -63,12 +72,12 @@ class _HomeState extends State<Home> {
                   width: 10,
                 ),
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  Text("Abhishek",
+                  Text(data.email.toString(),
                       style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.normal,
                           fontSize: 15)),
-                  Text("Password1@",
+                  Text(data.name.toString(),
                       style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.normal,
@@ -80,5 +89,14 @@ class _HomeState extends State<Home> {
         ),
       ),
     );
+  }
+
+  Future<bool> signOutFromGoogle() async {
+    try {
+      await FirebaseAuth.instance.signOut();
+      return true;
+    } on Exception catch (_) {
+      return false;
+    }
   }
 }
