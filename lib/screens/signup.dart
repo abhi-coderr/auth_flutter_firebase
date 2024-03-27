@@ -2,6 +2,7 @@ import 'package:auth_module/screens/home.dart';
 import 'package:flutter/material.dart';
 import '../utils/helper.dart';
 
+
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
 

@@ -5,7 +5,7 @@ plugins {
     id "dev.flutter.flutter-gradle-plugin"
 }
 
-def localProperties =  new Properties()
+def localProperties = new Properties()
 def localPropertiesFile = rootProject.file('local.properties')
 if (localPropertiesFile.exists()) {
     localPropertiesFile.withReader('UTF-8') { reader ->
@@ -70,4 +70,5 @@ dependencies {
     implementation 'com.android.support:multidex:2.0.1'
     implementation platform('com.google.firebase:firebase-bom:32.8.0')
     implementation 'com.google.firebase:firebase-analytics'
+    implementation "com.google.firebase:firebase-auth"
 }
