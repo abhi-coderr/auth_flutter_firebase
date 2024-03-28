@@ -1,22 +1,35 @@
-import 'package:auth_module/data/user_data.dart';
 import 'package:auth_module/screens/login.dart';
+import 'package:auth_module/utils/app_preferencies.dart';
+import 'package:auth_module/utils/const.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Home extends StatefulWidget {
-  const Home({super.key, required this.data});
-
-  final UserData data;
+  const Home({super.key});
 
   @override
-  State<Home> createState() => _HomeState(data: data);
+  State<Home> createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
-  _HomeState({required this.data});
+  var name = '';
+  var email = '';
 
-  final UserData data;
+  void initializeUserData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    name = await prefs.getString(Const.USER_NAME) ?? "";
+    email = await prefs.getString(Const.USER_EMAIL) ?? "";
+    setState(() { });
+  }
+
+  @override
+  void initState() {
+    setState(() {
+      initializeUserData();
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +43,9 @@ class _HomeState extends State<Home> {
           IconButton(
               onPressed: () {
                 signOutFromGoogle();
+                Shared.writeString(Const.TOKEN, "");
+                Shared.writeString(Const.USER_NAME, "");
+                Shared.writeString(Const.USER_EMAIL, "");
                 Navigator.pushReplacement(
                     context, MaterialPageRoute(builder: (context) => Login()));
               },
@@ -72,12 +88,12 @@ class _HomeState extends State<Home> {
                   width: 10,
                 ),
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  Text(data.email.toString(),
+                  Text(email.toString(),
                       style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.normal,
                           fontSize: 15)),
-                  Text(data.name.toString(),
+                  Text(name.toString(),
                       style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.normal,

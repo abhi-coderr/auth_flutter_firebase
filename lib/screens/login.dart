@@ -1,10 +1,13 @@
 import 'package:auth_module/data/user_data.dart';
 import 'package:auth_module/screens/home.dart';
 import 'package:auth_module/screens/signup.dart';
+import 'package:auth_module/utils/const.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import '../utils/app_preferencies.dart';
+import 'package:progress_loader_overlay/progress_loader_overlay.dart';
 import '../utils/helper.dart';
 
 class Login extends StatefulWidget {
@@ -19,13 +22,14 @@ class _LoginState extends State<Login> {
   late UserData userData;
 
   ValueNotifier userCredential = ValueNotifier('');
-
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final TextEditingController _passwordTE = TextEditingController();
   final TextEditingController _emailTE = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       body: Container(
           width: double.infinity,
           height: double.infinity,
@@ -80,23 +84,18 @@ class _LoginState extends State<Login> {
                         children: [
                           GestureDetector(
                             onTap: () async {
+                              await ProgressLoader().show(context);
+
                               if (!isLoggedIn) {
                                 userCredential.value = await signInWithGoogle();
+
                                 if (userCredential.value != null) {
                                   isLoggedIn = true;
-
-                                  Navigator.push(
+                                  await ProgressLoader().dismiss();
+                                  Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => Home(
-                                                  data: UserData(
-                                                userCredential
-                                                    .value.user!.displayName
-                                                    .toString(),
-                                                userCredential.value.user!.email
-                                                    .toString(),
-                                              ))));
-
+                                          builder: (context) => Home()));
                                   final snackBar = SnackBar(
                                       elevation: 0,
                                       behavior: SnackBarBehavior.floating,
@@ -151,7 +150,7 @@ class _LoginState extends State<Login> {
   Future<dynamic> signInWithGoogle() async {
     try {
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-
+      ProgressLoader().dismiss();
       final GoogleSignInAuthentication? googleAuth =
           await googleUser?.authentication;
 
@@ -160,10 +159,20 @@ class _LoginState extends State<Login> {
         idToken: googleAuth?.idToken,
       );
 
-      return await FirebaseAuth.instance.signInWithCredential(credential);
+      return await FirebaseAuth.instance
+          .signInWithCredential(credential)
+          .then((value) async => {
+                await ProgressLoader().dismiss(),
+                Shared.writeString(Const.TOKEN,
+                    value.credential?.accessToken.toString() ?? ""),
+                Shared.writeString(
+                    Const.USER_EMAIL, googleUser?.email.toString() ?? ""),
+                Shared.writeString(
+                    Const.USER_NAME, googleUser?.displayName.toString() ?? ""),
+              })
+          .onError(
+              (error, stackTrace) async => {await ProgressLoader().dismiss()});
     } on Exception catch (e) {
-      // TODO
-      print('exception->$e');
     }
   }
 

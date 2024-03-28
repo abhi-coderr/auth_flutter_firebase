@@ -373,6 +373,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.8"
+  progress_loader_overlay:
+    dependency: "direct dev"
+    description:
+      name: progress_loader_overlay
+      sha256: "63c661068b649054997f88b9eb6982a7f81a278ff67c662b36bdba9403dfeaff"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.3"
   shared_preferences:
     dependency: "direct dev"
     description:
